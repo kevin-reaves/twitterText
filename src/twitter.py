@@ -1,6 +1,8 @@
 import tweepy
 import credentials
 import twitterSettings
+from twilio.rest import Client
+
 
 def returnTweets(username):
     auth = tweepy.OAuthHandler(credentials.twitter["consumer_key"], credentials.twitter["consumer_secret"])
@@ -21,8 +23,16 @@ def returnTweets(username):
             return toText
 
 
+def sendTexts(tweetQueue):
+    # Since I'm paying per text, I'm sending everything in one text.
+    # It's less readable, but I don't want to spend much on a side project
+    client = Client(credentials.twilio["accountSID"], credentials.twilio["authToken"])
+    for number in credentials.twilio["cellPhone"]:
+        client.messages.create(body=str(tweetQueue), from_=credentials.twilio["twilioNumber"], to=number)
 
 if __name__ == "__main__":
     tweetQueue = []
     for user in twitterSettings.followNames:
         tweetQueue += returnTweets(user)
+    if tweetQueue:
+        sendTexts(tweetQueue)
