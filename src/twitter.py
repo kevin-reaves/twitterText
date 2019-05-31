@@ -3,8 +3,8 @@ import credentials
 import twitterSettings
 
 def returnTweets(username):
-    auth = tweepy.OAuthHandler(credentials.consumer_key, credentials.consumer_secret)
-    auth.set_access_token(credentials.access_token, credentials.access_token_secret)
+    auth = tweepy.OAuthHandler(credentials.twitter["consumer_key"], credentials.twitter["consumer_secret"])
+    auth.set_access_token(credentials.twitter["access_token"], credentials.twitter["access_token_secret"])
     api = tweepy.API(auth)
 
     toText = []
