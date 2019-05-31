@@ -9,9 +9,11 @@ def returnTweets(username):
     auth.set_access_token(credentials.twitter["access_token"], credentials.twitter["access_token_secret"])
     api = tweepy.API(auth)
 
+    # Will be sent as a text message
     toText = []
 
     for tweet in tweepy.Cursor(api.user_timeline, id=username).items():
+        # Twitter's api doesn't provide a way to find tweets within a certain date range, so we'll use likes
         if not tweet.favorited:
             api.create_favorite(tweet.id)
             addToText = {}
